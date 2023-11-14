@@ -89,7 +89,7 @@ Examine the permissions of your 'genomes' directory.
 	ls -lh genomes
 
 > **`ls -l`** = long list, providing you information on when the **`genomes`** directory was created and its associated permissions.
-> the `-h` specifies that the output be in human-readable format.
+> the **`-h`** specifies that the output be in human-readable format.
 
 <br>
 
@@ -170,14 +170,14 @@ of these files with respect to the root directory (i.e. going through the entire
 where these files are located with respect to your current working directory (i.e. where you are when you enter `pwd`).
 Let's try using absolute and relative paths.
 
-  cp /home/BMS500-2023/genomes/wnv_contextual.fasta genomes
+	cp /home/BMS500-2023/genomes/wnv_contextual.fasta genomes
 
 > **`cp`** = copy.
 > Here we used the absolute path to copy the fasta file `wnv_contextual.fasta` to our `genomes` directory.
 
 Now `cd` into your `reference` directory and use a relative path to copy the reference fasta file (HQ596519.fasta) to where you are.
 
-  cp ../../BMS500-2023/reference/HQ596519.fasta .
+	cp ../../BMS500-2023/reference/HQ596519.fasta .
 
 > Notice that we had to move up two directories to get to `BMS500-2023`.
 > Also notice that we must always specify an end location for our copied files but in this case, we are copying the file to our current location, 
@@ -185,7 +185,7 @@ Now `cd` into your `reference` directory and use a relative path to copy the ref
 
 View and edit the contents of a file with a text editor. Let's open our reference fasta file and change the sequence name to 'reference.'
 
-  nano HQ596519.fasta
+	nano HQ596519.fasta
 
 > Nano, emacs, vim, and vi are all text editors.
 > You can make an empty file on the fly by typing `nano` or `nano filename`.  This will open a blank text editor screen.
