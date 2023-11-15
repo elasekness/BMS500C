@@ -188,7 +188,7 @@ View and edit the contents of a file with a text editor. Let's open our referenc
 	nano HQ596519.fasta
 
 > Nano, emacs, vim, and vi are all text editors.
-> You can make an empty file on the fly by typing `nano` or `nano filename`.  This will open a blank text editor screen.
+> You can make an empty file on the fly by typing **`nano`** or **`nano filename`**.  This will open a blank text editor screen.
 > Save your changes with **`control-o`**. To exit the text editor, use **`control-x`**.
 > More information on Nano commands can be found here: 
 > [Nano](https://www.howtogeek.com/howto/42980/the-beginners-guide-to-nano-the-linux-command-line-text-editor/)
@@ -245,7 +245,7 @@ Navigate to NCBI’s homepage: [https://www.ncbi.nlm.nih.gov/](https://www.ncbi.
 > PubMed allows literature searches and BLAST is an alignment tool to look for sequences that are similar (a proxy for homology) to your queries.
 
 
-Choose “Nucleotide” under the top left pull-down menu (set to “All Databases” by default), type West Nile Virus into the search area, and hit enter. This brings us to a page containing over 50,000 nucleotide entries for WNV.  Many of these are only partical genomes or partial coding sequences, which we don't want. We could use the options in the left-side panel to filter the list further but this will be of limited use here. Clearly we need a better strategy.  If we click on the `NCBI Virus` botton located in the taxonomy panel, we are brought to a far more useful page that lists all WNV genomes and allows us to filter the data by several criteria, such as collection date, accession number, genome completeness, and host among others.  Since we know the accession number of our genome, we can type this into the Accession box and our genome appears.  If we click on the genome accession, we obtain more information about the sequence.  If we scroll up to the `Download` button, we can download the nucleotide sequence in fasta format.
+Choose 'Nucleotide' under the top left pull-down menu (set to 'All Databases' by default), type West Nile Virus into the search area, and hit enter. This brings us to a page containing over 50,000 nucleotide entries for WNV.  Many of these are only partical genomes or partial coding sequences, which we don't want. We could use the options in the left-side panel to filter the list further but this will be of limited use here. Clearly we need a better strategy.  If we click on the `NCBI Virus` botton located in the taxonomy panel, we are brought to a far more useful page that lists all WNV genomes and allows us to filter the data by several criteria, such as collection date, accession number, genome completeness, and host among others.  Since we know the accession number of our genome, we can type this into the Accession box and our genome appears.  If we click on the genome accession, we obtain more information about the sequence.  If we scroll up to the `Download` button, we can download the nucleotide sequence in fasta format.
 We could download this sequence to our computers and then upload it to our VMs but this is a two-step process.
 An easier way would be to use one of NCBI's tools for interacting with their databases.
 
@@ -347,52 +347,60 @@ Use **`sed`** to rename the definition lines of your fasta file so that only the
 > In our example, the fasta file contains definition lines that begin with genome accessions, proceeded by metadata separated from the accession with a space and a `|`. The format of the metadata varies among the definition lines.
 > We can use a regular expression to replace all of the patterns displayed in the sequence names without having to search for each pattern individually. Regular expressions use characters with special meaning (metacharacters).
 > Like **`grep`**, **`sed`** will search for your pattern line by line. It will make a replacement once (unless you specify otherwise, see the manual page).
-> Here we search for a `|` and everything that proceeds it, specified by two metacharacters: **`.`** and **`*`**. The `.` represents any character one time and the `*` is a greedy character that represents any character and number of times.
+> Here we search for a `|` and everything that proceeds it, specified by two metacharacters: **`.`** and **`*`**. The `.` represents any character one time and the `*` is a greedy character that represents any character any number of times.
 > If we wanted to specify an actual period and not a special character, we would need to escape the metacharacter with a preceeding slash: `\.`
-> Brackets also have special meaning, specifying ranges of numbers, letters, or both). Additional metacharacters and their meanings are listed below.
+> Brackets also have special meaning, specifying ranges of numbers, letters, or both. Additional metacharacters and their meanings are listed below.
 
 
+As you can see (but not very well) **`sed`** will print your entire document to STDOUT with the replacements made. However, it prints the entire file to STDOUT, making it hard to find the changes, which are only in the definition lines.
 
-**`sed`** will print your entire document to STDOUT with the replacements made.
+* How can you view just the definition lines you have changed by piping the output of `sed` to another command?
+* Do you get the same results if you don't include the `.` in your search pattern?
+* How would you remove the 'set:accession' pattern at the end of some of the sequence names?
 
-* How can you view just the definition lines you have changed with a pipe?
-* What happens if you don't include the trailing space in your search pattern?
-* What happens if we make our search pattern less specific?
-* Try **`s/YP.* /Wuhan-1 /`** as the search and replace pattern. Did this work the way you expected?
 
 <br>
 
 
 ## More piping
 
-Let's try some more complicated parsing of our data using various Bash commands and pipes. First, take a quick view of the gff file.  It's bulky and the lines don't fit on
-our screen, making it difficult to visualize.
+Let's try some more complicated parsing of our data using various Bash commands and pipes. First, copy the annotation file (HQ596519.gff3) for our reference genome from the `BMS50-2023` directory to your `reference` directory and take a quick view of the gff file (using `head`, `more` or some other option).  A gff file is a tab delimited file that provides a description of the genes, the function of the coding sequences, and the start and stop positions of the genes (and other features) in the genome. One genome feature is listed per line. The lines don't fit on our screen, making it difficult to visualize.
+
 <br>
 
 Extract all coding sequences (CDS) and view their start and stop positions with a combination of 'grep' and 'cut.'
 
 
-	grep "CDS" GCF_009858895.2_ASM985889v3_genomic.gff | cut -f 3,4,5
+	grep "CDS" HQ596519.gff3 | cut -f 3,4,5
 
 > We have searched for every line that contains **`CDS`** and cut those lines on the third, fourth, and fifth delimiters (delimiters can be anything but the default is a tab).
-> Essentially, we have extracted the information in the third, fourth, and fifth fields of each line that contained **`CDS`**.
-> This also highlights that **`grep`** is greedy - returning **`CDS`** if it is part of a larger phrase or word. If we want to be more specific we have a few options.
+> This also highlights that **`grep`** is greedy - returning **`CDS`** even if it is part of a larger phrase or word.
+> Because WNV RNA is translated as a single polyprotein and then post-translationally cleaved, the description of the coding sequence features in this gff file are labeled as 'CDS' for the polyprotein and 'mature_protein_region_of_CDS' for the 10 cleaved subunits.
+> There are a few ways to be more specific about the features we extract.
 
 <br>
 
-Extract only exact matches to **`CDS`** in the third field of the gff file and print the 3rd-5th fields to STDOUT
+Extract only exact matches to **`CDS`** in the third field of the gff file and print the 3rd-5th fields to STDOUT.
 
 
-	cut -f 3,4,5 GCF_009858895.2_ASM985889v3_genomic.gff | grep "CDS" | grep -v "mature"
+	cut -f 3,4,5 HQ596519.gff3 | grep "CDS" | grep -v "mature"
 
-> What does the '-v' argument specify in the **`grep`** command? What is another approach to getting the same results?
+* What does the '-v' argument specify in the **`grep`** command?
+* What is another approach to getting the same results?
 
 <br>
 
+Find and count only mature protein coding regions.
 
-Count the number of occurrences of **`CDS`** there are in the third field of the gff file
+	grep -wc "mature_protein_region_of_CDS" HQ596519.gff3
 
-	cut -f 3 GCF_009858895.2_ASM985889v3_genomic.gff | grep "CDS" | sort | uniq -c
+ > We specify an exact word match with the `w` argument.
+
+<br>
+
+Count how many mature protein coding regions are on the positive strand (information on strandedness is in the 7th column)
+
+	grep -w "mature_protein_region_of_CDS" HQ596519.gff3 | cut -f 7 | sort | uniq -c
 
 > **`sort`** sorts lines alpha-numerically (by default, this can be changed) and **`uniq -c`** counts the number of times each unique pattern occurs.
 > Note that the lines must be sorted in order for **`uniq -c`** to work properly.
@@ -403,7 +411,7 @@ Count the number of occurrences of **`CDS`** there are in the third field of the
 ## Bash for loops
 
 
-Bash for loops are basically little shell scripts that you are executing from the command line (Bash is a type of shell, and shells are little programs for interpreting your commands). Like all loops, they allow you to automate iterative processes. For example, instead of opening 200 hundred fasta files and manually changing the definition lines in each, I can run a for loop that will open each fasta file and make the changes that I specify.
+Bash for loops are basically little shell scripts that can be excecuted from the command line (Bash is the command-line language we are using). Like all loops, they allow you to automate iterative processes. For example, instead of opening 200 hundred fasta files and manually changing the definition lines in each, I can run a for loop that will open each fasta file and make the changes that I specify.
 
 The basic syntax is:
 
@@ -414,21 +422,23 @@ The basic syntax is:
 > whereby “done” will exit us from the loop.
 > The $ in front of FILE indicates that $FILE is a variable, a placeholder which is referring to each file that enters the loop,
 > just as x is a variable that represents 2 in the equation x = 2.
+> The `for`, `in`, `do`, and `done` are required parts of the for-loop syntax.
 
 <br>
 
-Use a 'for loop' to decompress all of your files at once:
+Use a 'for loop' to count the lines in your reference fasta and gff file:
 
 
-	for filn in *gz; do gzip -d $filn; done
+	for filn in HQ*; do wc -l $filn; done
 
 
-> Here we used a for loop and the greedy metacharacter, **`*`**. The special **`*`** character represents any character any number of times.
-> For now, examine the contents of your files with **`head`**, **`tail`**, or **`more`**.
-> Fasta files have a Definition Line or Header, with the sequence name proceeded by a **`>`**, followed by the sequence starting on the next line.
-> GFF files have a standard format as well with each field/column (separated by tabs), which contain specific information about the entry.
-> For example, the 4th and 5th fields of a gff file always contain the start and stop coordinates for the entry.
-> Each line contains information on an entry, such as a gene or coding sequence.
+> Here we use the greedy metacharacter, **`*`** to specify that we want to count the lines of all files begining with 'HQ'.
+> Note that you don't actually need a loop to count the lines in both files.
+
+	wc -l HQ*
+
+<br>
+
 
 ## Regular expressions (regex) and special characters (metacharacters)
 
@@ -445,3 +455,7 @@ Metacharacters have a special meaning and include:
 Usually, we escape special characters with a backslash to interpret them literally.
 
 <br>
+
+## Assignment 1 ##
+
+Now that we're all expert pipers and regex users, can you modify the sequence names in the wnv_contextual.fasta file so that only the accession number proceeded by the geographic location (Country or state) and collection date are displayed?
