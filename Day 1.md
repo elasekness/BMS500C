@@ -272,66 +272,34 @@ As you can see, there are usually multiple ways to solve a problem in bioinforma
 ## Obtaining reads from the SRA
 
 
-Now let's download the raw reads for the several WNV libraries from the SRA (sequence read archive) database.  We'll map the reads from these libraries on to our reference genome. Typically, any published NGS data must also be submitted to the SRA. Each sample/specimen sequenced will have a BioSample accession number. Biosample information provides associated metadata. The SRA and Biosample for each submission are further housed under a BioProject, which can contain multiple submissions from the same study or experiment. The SRA entries for our data are listed below, each student will be assigned a single entry:
+Now let's download the raw reads for a WNV library from the SRA (sequence read archive) database.  We'll map the reads from these libraries on to our reference genome. Typically, any published NGS data must also be submitted to the SRA. Each sample/specimen sequenced will have a BioSample accession number. Biosample information provides associated metadata. The SRA and Biosample for each submission are further housed under a BioProject, which can contain multiple submissions from the same study or experiment. Because the SRA entries often contain information about the origin of the sample and are linked to additional metadata, I'm not going to have you download the libraries you'll be using to generate refence-based assemblies.  You'll copy these renamed files from the BMS500-2023 directory. 
 
-## Sample assignment and metadata
+Return to the [NCBI homepage](https://www.ncbi.nlm.nih.gov/), select 'SRA' from the dropdown menu and search for West Nile Virus. This results in over 5,000 entries.  Let's filter further by selecting options in the menu to the left. For 'File type' select 'fastq', for 'Strategy' select 'genome', and for 'Plastform' select 'Illumina.' We want paired-end (PE) data as well but notice that all 'Illumina' libraries are PE.  Click on the link for the first library entitled [Other Sequencing of West Nile Virus](https://www.ncbi.nlm.nih.gov/sra/SRX13440230[accn]) listed.
 
-| Student | SRA accession |
-| ------- | --------------- |
-| Student1 | SRR10017193 |
-| Student2 | SRR1985253 |
-| Student3 | SRR7509264 |
-| Student4 | SRR7509274 |
-| Student5 | SRR8573821 |
-| Student6 | SRR8573828 |
-| Student7 | SRR22764495 |
+This brings you to a page with additional information on the sequencing run as well as links to the [Bioproject](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA231221) and [Biosample](https://www.ncbi.nlm.nih.gov/biosample/SAMN24061100).
+
+By click on the link to the run [SRR17262079](https://trace.ncbi.nlm.nih.gov/Traces/?view=run_browser&acc=SRR17262079&display=metadata), we could download the two fastq files and then upload them to our VM or we could use faster tools provided by NCBI.
 
 
-Return to the [NCBI homepage](https://www.ncbi.nlm.nih.gov/) and search genomes for Wuhan-1 again. This brings you to its GenBank page.
-Normally, we would click the link to the associated BioProject but this takes us to a large umbrella project that would be difficult to search.
-Instead, we could click the link to the publication on PubMed and search the journal article for the BioProject.  I have done this for you.
+Use **`prefetch`** and **`fasterq-dump`** tools from the SRA toolkit to download the fastq files for SRR17262079.
 
-
-Go to the Bioproject for Wuhan 1: [PRJNA603194](https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA603194)
-Notice the BioProject page gives you information on the purpose of the study, as well as several links, including one to the SRA experiment.
-
-
-Click on the link to the [SRA experiment](https://www.ncbi.nlm.nih.gov/sra?linkname=bioproject_sra_all&from_uid=603194) for Wuhan-1
-Notice this is a metatranscriptome, meaning this may not be a pure isolate of a single SARS-CoV-2 virus (although human RNA/DNA should have been removed prior to
-SRA submission).  The sequencing was performed on an Illumina MiniSeq and the reads are paired (i.e. there are Forward and Reverse reads for the same amplicon).
-We could download the two fastq files using the NCBI link provided or we could use faster tools provided by NCBI.
-
-
-Use **`prefetch`** and **`fasterq-dump`** tools from the SRA toolkit to download the Wuhan-1 fastq files.
-
-	prefetch SRR10971381
-	fasterq-dump SRR10971381
+	prefetch SRR17262079
+	fasterq-dump SRR17262079
 
 > **`prefetch`** will download the SRA data in binary format and **`fasterq-dump`** will perform the fastq conversion.
 > Notice that the conversion tool automatically saves forward and reverse reads to separate files.
 > Although we could use fasterq by itself, NCBI claims prefetch in combination with fasterq is faster.
 > More information on the SRA-toolkit and other frequently used tools can be found here: [SRA toolkit](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc)
->
-> **Note:** If your are having trouble obtaining the fna, faa, and gff files from NCBI, you can also copy them to your account on the VM from our GCP bucket
-> using the gsutil commands provided by GCP. Fastq files also available in the bucket in the same folder: 'reference_assembly.' However, you will need to
-> authenticate your account first in order to use the gsutil commands.
->
-> `gsutil -m cp gs://wc-bms-bi-training-bucket/reference_assembly/GCF* .`
->
-> We'll discuss this command more in class but essentially, we are copying all files that start with GCF from our GCP bucket to our current directory `.` .
 
 <br>
 
 ## Manipulating data: Parsing files, modifying content, and piping
 
 
-Often, we want to extract information from and/or alter the contents of a file.
-We might also want to determine some basic features of the file.
-For example, we might want to know how many sequences are in our fasta file without having to open and scroll through a file.
-You will probably use the following commands most frequently to parse and manipulate files – grep, sed, cut, paste, sort and uniq.
-These commands can perform simple routines such as search and replace but combined with regular expressions, these tools are incredibly powerful and efficient.
-Piping is specified by **`|`** and simply pipes the STDOUT from one command to another so that you can string multiple operations together on one line.
-Sometimes the most challenging bioinformatics operations are wrangling your data into the proper format.
+Often, we want to extract information from and/or alter the contents of a file. We might also want to determine some basic features of the file. For example, we might want to know how many sequences are in our fasta file without having to open and scroll through a file. You will probably use the following commands most frequently to parse and manipulate files – grep, sed, cut, paste, sort and uniq. These commands can perform simple routines such as search and replace but combined with regular expressions, these tools are incredibly powerful and efficient.
+
+Piping is specified by **`|`** and simply pipes the STDOUT from one command to another so that you can string multiple operations together on one line. Sometimes the most challenging bioinformatics operations are wrangling your data into the proper format.
+
 <br>
 
 
