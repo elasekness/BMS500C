@@ -259,6 +259,8 @@ Let's download our sequence and redirect STDOUT to a file.
 
 	efetch -db nuccore -format fasta -id HQ596519 > HQ596519.fasta
 
+ > Remember that STDOUT is output from a command that gets printed to your screen while the `>` symbol redirects this output to a file.
+
 Although we aren't working with eukaryotic or prokaryotic genomes, it's worth mentioning that there is a command-line
 tool to download these as well: the **`datasets`** command-line tool. A help menu will appear if you type **`datasets`** without any arguments.  Typing **`datasets download`** will give you additional information on how to use this command, which shows the option to download a genome by its accession.  
 
@@ -270,7 +272,19 @@ As you can see, there are usually multiple ways to solve a problem in bioinforma
 ## Obtaining reads from the SRA
 
 
-Now let's download the raw reads for the Wuhan-1 reference genome from the SRA (sequence read archive) database.  We'll use these later to perform a de-novo assembly. Typically, any published NGS data must also be submitted to the SRA. Each sample/specimen sequenced will have a BioSample accession number. Biosample information provides associated metadata. The SRA and Biosample for each submission are further housed under a BioProject, which can contain multiple submissions from the same study or experiment
+Now let's download the raw reads for the several WNV libraries from the SRA (sequence read archive) database.  We'll map the reads from these libraries on to our reference genome. Typically, any published NGS data must also be submitted to the SRA. Each sample/specimen sequenced will have a BioSample accession number. Biosample information provides associated metadata. The SRA and Biosample for each submission are further housed under a BioProject, which can contain multiple submissions from the same study or experiment. The SRA entries for our data are listed below, each student will be assigned a single entry:
+
+## Sample assignment and metadata
+
+| Student | SRA accession |
+| ------- | --------------- |
+| Student1 | SRR10017193 |
+| Student2 | SRR1985253 |
+| Student3 | SRR7509264 |
+| Student4 | SRR7509274 |
+| Student5 | SRR8573821 |
+| Student6 | SRR8573828 |
+| Student7 | SRR22764495 |
 
 
 Return to the [NCBI homepage](https://www.ncbi.nlm.nih.gov/) and search genomes for Wuhan-1 again. This brings you to its GenBank page.
