@@ -235,10 +235,7 @@ Try `which` to see if the command is in your path – whether the command is in 
 
 There are several sequence databases – NCBI, JGI, EMBL - that you might encounter.
 You might want to explore each of these to familiarize yourself with the resources they offer.
-We will focus on NCBI.  Our goal is to download a reference genome (Wuhan-1) for SARS-CoV-2,
-which we will use later to perform a reference-based assembly and an outbreak analysis.
-We will also want to download the accompanying annotation file (gff file), which provides a description of the genes,
-the function of the coding sequences, and the nucleotide positions of the genes in the genome and the translated coding sequences (faa file).
+We will focus on NCBI.  Our goal is to download the same reference genome that you copied to your `reference` directory. We also want to download the accompanying annotation file (gff file), which provides a description of the genes, the function of the coding sequences, and the start and stop positions of the genes in the genome.
 
 
 Navigate to NCBI’s homepage: [https://www.ncbi.nlm.nih.gov/](https://www.ncbi.nlm.nih.gov/)
@@ -246,45 +243,24 @@ Navigate to NCBI’s homepage: [https://www.ncbi.nlm.nih.gov/](https://www.ncbi.
 
 > Notice that there are options to submit sequences, download sequences, and even analyze data.
 > PubMed allows literature searches and BLAST is an alignment tool to look for sequences that are similar (a proxy for homology) to your queries.
-> Also notice that NCBI has provided a quick link to SARS-CoV-2 data. You could obtain a nucleotide record by clinking on this link but we'll follow
-> the more traditional route for now.
 
 
-Choose “Genome” under the top left pull-down menu (set to “All Databases” by default), type SARS-CoV-2 into the search area, and hit enter.
-This brings us to a page containing information on the reference genome (Wuhan-1).  We could also 'Browse the list' of other available genomes.
-We can click on the 'RefSeq' link and use the 'Send to' menu to save the 'Complete Record' for this genome to a file in 'fasta' format. By default,
-the file is named 'sequence.txt.'  From there we can upload the file to our VM. Instead we will:
+Choose “Nucleotide” under the top left pull-down menu (set to “All Databases” by default), type West Nile Virus into the search area, and hit enter. This brings us to a page containing over 50,000 nucleotide entries for WNV.  Many of these are only partical genomes or partial coding sequences, which we don't want. We could use the options in the left-side panel to filter the list further but this will be of limited use here. Clearly we need a better strategy.  If we click on the `NCBI Virus` botton located in the taxonomy panel, we are brought to a far more useful page that lists all WNV genomes and allows us to filter the data by several criteria, such as collection date, accession number, genome completeness, and host among others.  Since we know the accession number of our genome, we can type this into the Accession box and our genome appears.  If we click on the genome accession, we obtain more information about the sequence.  If we scroll up to the `Download` button, we can download the nucleotide sequence in fasta format.
+We could download this sequence to our computers and then upload it to our VMs but this is a two-step process.
+An easier way would be to use one of NCBI's tools for interacting with their databases.
 
+Return to your VM terminal and type:
 
-'Browse the list' of available genomes to access the RefSeq or GenBank FTP site for our reference genome (which is conveniently the first genome listed).
- If it wasn't the first genome listed, we could apply search filters to narrow the list.
+	efetch --help
 
+ > This brings up a long menu of options for the efetch tool, which can be used to download a variety of data in different formats from NCBI. The relevant arguments for us will be the database `-db` we want to search, the format `-format` of the data, and the `-id` of our query, which is the accession of our WNV reference gnome.
 
-Click on the RefSeq ('R') FTP link for MN908497.3 (Wuhan-1). Open the link as a "Guest." This takes you to a directory with several files associated with the Wuhan-1 genome. For now let's obtain the genome assembly (.fna), the accompanying annotation (.gff), and the protein coding sequences (.faa).
-Instead of a two-step process of downloading files to our computers and then uploading them to the cloud, we will use the **`curl`** command (copy url) to copy the files directly to
-our VMs.
+Let's download our sequence and redirect STDOUT to a file.
 
+	efetch -db nuccore -format fasta -id HQ596519 > HQ596519.fasta
 
-Right click on the fna file and 'Get info.' The information page will list the file location on NCBI's server.
-
-
-Copy the server information and type the following command in your VM terminal:
-
-	curl -O "ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/858/895/GCF_009858895.2_ASM985889v3/GCF_009858895.2_ASM985889v3_genomic.fna.gz"
-
-> The **`-O`** option saves the copied contents to a file named as it was on the FTP site.
-> Repeat this for the gff and faa files
-
-
-Alternatively, we could select Assembly from the drop down menu and search for SARS-CoV-2.  This offers a bit more flexibility for search terms.  For example, searching for Staphylococcus aureus strain N315 in Genomes would bring us to the page for the type strain  Staphylococcus aureus subsp. aureus NCTC 8325, whereas the same search in Assembly will return the correct page for our query.  From here you can click on the Download Assembly button and select the files you want.  There are also links to the RefSeq and GenBank ftp sites.  From the ftp site, you can copy the link for your file of interest and use curl to download it directly to your VM.
-
-
-A new feature of the NCBI site is the Taxonomy page.  A link to this page can now be found on the Genome results page.  Clicking this link for SARS-CoV-2 will bring you to the Taxonomy page for the reference genome, which happens to be Wuhan-1. You can download the assembly files you want from here as well.
-
-
-Finally, probably the easiest and fastest way to download the Wuhan-1 genome directly to your VM is to use NCBI's **`datasets`** command-line tool. This tool has already been installed for you. A help menu will appear if you type **`datasets`** without any arguments.  We want to download a dataset so we will use this function.  Typing **`datasets download`** will give you additional information on how to use this command as will **`datasets downnload virus`**.  Let's try downloading the Wuhan-1 assembly (accession number must be RefSeq).
-
-	datasets download virus genome accession NC_045512.2
+Although we aren't working with eukaryotic or prokaryotic genomes, it's worth mentioning that there is a command-line
+tool to download these as well: the **`datasets`** command-line tool. A help menu will appear if you type **`datasets`** without any arguments.  Typing **`datasets download`** will give you additional information on how to use this command, which shows the option to download a genome by its accession.  
 
 
 As you can see, there are usually multiple ways to solve a problem in bioinformatics.
