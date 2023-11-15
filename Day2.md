@@ -140,7 +140,7 @@ Remove adapters from your reads and keep only those reads passing quality metric
 <br>
 
 
-## Map trimmed reads to the reference genome
+## Mapping trimmed reads to the reference genome
 
 We will map our reads to the HQ596519 reference genome with [BWA](http://bio-bwa.sourceforge.net">http://bio-bwa.sourceforge.net) (Burrows-Wheeler Aligner), a short-read aligner tool. Most short-read aligners rely on breaking reads into K-mers (shorter sequences of a specified length), aligning these to the reference genome, and extending these seeds with some amount of base misincorporation. This is actually faster than aligning the entire read. BWA outputs the alignment information in a [SAM](https://samtools.github.io/hts-specs/SAMv1.pdf) format. The output from BWA will need to be saved in a file, converted to a binary format, and sorted by read position in the genome (or coordinate) for additional analyses, such as variant calling.  While we could do each step individually, we can also pipe these commands together for faster processing and to avoid generating intermediate files that we would later delete.
 
