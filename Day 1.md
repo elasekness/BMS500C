@@ -336,21 +336,21 @@ Count the number of sequences in the fasta file using a pipe to `wc` instead.
 
 <br>
 
-Use **`sed`** to rename the definition lines of your faa file.
+Use **`sed`** to rename the definition lines of your fasta file so that only the accessions remain.
 
 
-	sed 's/YP.*\.[0-9] /Wuhan-1 /' GCF_009858895.2_ASM985889v3_protein.faa
+	sed "s/|.*//" wnv_contextual.fasta
 
 > **`sed`** = stream editor.  **`sed`** is essentially a search and replace function.
-> Like **`grep`**, we can search for and replace complicated patterns when we use this command with regular expressions.
+> Like **`grep`**, we can search for complicated patterns when we use this command with regular expressions. Unlike `grep`, we can replace these complicated patterns with another.
 > The syntax for the search and replace command is **`'s/search pattern/replacement pattern/'`** where the 's' stands for substitute.
->
-> In our example, the faa file contains definition lines that begin with the accession numbers of the proteins, all of which contain a 'YP_' followed by a unique number.
-> We can use regular expressions to replace all of these patterns without having to search for each unique accession number.
-> We are searching for all patterns that contain a YP followed by any character (represented by the metacharacter **`.`**) any number of times, followed by a period
-> (we must use a backslash in front of the period to specify a literal period and not a special character), followed by a single number with a range of 0-9
-> (brackets also have special meaning, specifying ranges of numbers, letters, or both), and a space.
-> Like **`grep`**, **`sed`** will search for your pattern line by line and make the replacement once (unless you specify otherwise, see the manual page).
+> In our example, the fasta file contains definition lines that begin with genome accessions, proceeded by metadata separated from the accession with a space and a `|`. The format of the metadata varies among the definition lines.
+> We can use a regular expression to replace all of the patterns displayed in the sequence names without having to search for each pattern individually. Regular expressions use characters with special meaning (metacharacters).
+> Like **`grep`**, **`sed`** will search for your pattern line by line. It will make a replacement once (unless you specify otherwise, see the manual page).
+> Here we search for a `|` and everything that proceeds it, specified by two metacharacters: **`.`** and **`*`**. The `.` represents any character one time and the `*` is a greedy character that represents any character and number of times.
+> If we wanted to specify an actual period and not a special character, we would need to escape the metacharacter with a preceeding slash: `\.`
+> Brackets also have special meaning, specifying ranges of numbers, letters, or both). Additional metacharacters and their meanings are listed below.
+
 
 
 **`sed`** will print your entire document to STDOUT with the replacements made.
