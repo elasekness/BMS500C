@@ -220,9 +220,9 @@ Remove a file. Let's remove files we don't need.
 
 * Avoid creating file names and directories with spaces. Use underscores, dashes, or periods instead to separate multi-part names.
 * Spaces need to be escaped in Linux (more on that later).  For example, if you tried to make a directory called “my directory”,
-* mkdir would make two directories, “my” and “directory.”
+* mkdir would make two directories, `my` and `directory`.
 * Use autocomplete for speedier typing and to avoid typos.  Autocomplete will fill in the unique part of a command or file.
-For example, if I had only one file in my directory that began with a “b,” I could type b and then press the tab key to autocomplete the name of the directory.
+For example, if I had only one file in my directory that began with a “b,” I could type `b` and then press the tab key to autocomplete the name of the directory.
 * Everything in Linux is case sensitive
 * Can’t find a command?
 Try `which` to see if the command is in your path – whether the command is in a location that the computer searches for executing commands.
@@ -272,13 +272,13 @@ As you can see, there are usually multiple ways to solve a problem in bioinforma
 ## Obtaining reads from the SRA
 
 
-Now let's download the raw reads for a WNV library from the SRA (sequence read archive) database.  We'll map the reads from these libraries on to our reference genome. Typically, any published NGS data must also be submitted to the SRA. Each sample/specimen sequenced will have a BioSample accession number. Biosample information provides associated metadata. The SRA and Biosample for each submission are further housed under a BioProject, which can contain multiple submissions from the same study or experiment. Because the SRA entries often contain information about the origin of the sample and are linked to additional metadata, I'm not going to have you download the libraries you'll be using to generate refence-based assemblies.  You'll copy these renamed files from the BMS500-2023 directory. 
+Now let's download the raw reads for a WNV library from the SRA (sequence read archive) database.  We'll map the reads from WNV sequencing libraries on to our reference genome. Typically, any published NGS data must also be submitted to the SRA. Each sample/specimen sequenced will have a BioSample accession number. Biosample information provides associated metadata. The SRA and Biosample for each submission are further housed under a BioProject, which can contain multiple submissions from the same study or experiment. Because the SRA entries often contain information about the origin of the sample and are linked to additional metadata, I'm not going to have you download the libraries you'll be using to generate refence-based assemblies.  You'll copy these renamed files from the `BMS500-2023` directory. 
 
-Return to the [NCBI homepage](https://www.ncbi.nlm.nih.gov/), select 'SRA' from the dropdown menu and search for West Nile Virus. This results in over 5,000 entries.  Let's filter further by selecting options in the menu to the left. For 'File type' select 'fastq', for 'Strategy' select 'genome', and for 'Plastform' select 'Illumina.' We want paired-end (PE) data as well but notice that all 'Illumina' libraries are PE.  Click on the link for the first library entitled [Other Sequencing of West Nile Virus](https://www.ncbi.nlm.nih.gov/sra/SRX13440230[accn]) listed.
+Return to the [NCBI homepage](https://www.ncbi.nlm.nih.gov/), select 'SRA' from the dropdown menu and search for 'West Nile Virus'. This results in over 5,000 entries.  Let's filter further by selecting options in the menu to the left. For 'File type' select 'fastq', for 'Strategy' select 'genome', and for 'Plastform' select 'Illumina.' We want paired-end (PE) data as well but notice that all 'Illumina' libraries are PE.  Click on the link for the first library entitled [Other Sequencing of West Nile Virus](https://www.ncbi.nlm.nih.gov/sra/SRX13440230[accn]).
 
 This brings you to a page with additional information on the sequencing run as well as links to the [Bioproject](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA231221) and [Biosample](https://www.ncbi.nlm.nih.gov/biosample/SAMN24061100).
 
-By click on the link to the run [SRR17262079](https://trace.ncbi.nlm.nih.gov/Traces/?view=run_browser&acc=SRR17262079&display=metadata), we could download the two fastq files and then upload them to our VM or we could use faster tools provided by NCBI.
+By clicking on the link to the run [SRR17262079](https://trace.ncbi.nlm.nih.gov/Traces/?view=run_browser&acc=SRR17262079&display=metadata), we could download the two fastq files associated with this run and then upload them to our VM or we could use faster tools provided by NCBI.
 
 
 Use **`prefetch`** and **`fasterq-dump`** tools from the SRA toolkit to download the fastq files for SRR17262079.
@@ -290,6 +290,8 @@ Use **`prefetch`** and **`fasterq-dump`** tools from the SRA toolkit to download
 > Notice that the conversion tool automatically saves forward and reverse reads to separate files.
 > Although we could use fasterq by itself, NCBI claims prefetch in combination with fasterq is faster.
 > More information on the SRA-toolkit and other frequently used tools can be found here: [SRA toolkit](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc)
+
+If you haven't done so already, try moving your fastq files to your `fastq` directory from your current location.
 
 <br>
 
@@ -303,54 +305,34 @@ Piping is specified by **`|`** and simply pipes the STDOUT from one command to a
 <br>
 
 
-Decompress your files.
+`cd` to your `genomes` directory and count how many sequences are in the `wnv_contextual.fasta` file.
 
+	grep -c ">" wnv_contextual.fasta
 
-	gzip -d GCF_009858895.2_ASM985889v3_genomic.fna.gz
-
-
-> Although we are decompressing our files here, many of the programs we will employ can work with compressed files, which saves time and space.
-
-<br>
-
-Use a 'for loop' to decompress all of your files at once:
-
-
-	for filn in *gz; do gzip -d $filn; done
-
-
-> Here we used a for loop and the greedy metacharacter, **`*`**.  We'll cover both in more detail late. In brief, for loops help us
-> automate repetitive processes and the special **`*`** character represents any character any number of times.
-> For now, examine the contents of your files with **`head`**, **`tail`**, or **`more`**.
-> Fasta files have a Definition Line or Header, with the sequence name proceeded by a **`>`**, followed by the sequence starting on the next line.
-> GFF files have a standard format as well with each field/column (separated by tabs), which contain specific information about the entry.
-> For example, the 4th and 5th fields of a gff file always contain the start and stop coordinates for the entry.
-> Each line contains information on an entry, such as a gene or coding sequence.
-
-<br>
-
-
-Count how many coding sequences are present in your faa file.
-
-
-	grep -c GCF_009858895.2_ASM985889v3_protein.faa
+ <br>
 
 > **`grep`** = global regular expression print.  Grep searches a file line-by-line for patterns that you specify and returns every line containing that pattern.
 > The **`-c`** option counts the number of lines that contain the search pattern instead of returning the lines.
 > Try **`grep`** without the **`-c`** argument to see the difference.
 > Combined with metacharacters, **`grep`** is a powerful way to search your document for complicated patterns.
 
-<br>
+Grab the first 5 header lines from your fasta file with `grep` and a pipe.
 
-Grab the first 5 header lines from your faa file with grep and a pipe.
+	grep  ">" wnv_contextual.fasta | head -5
 
-
-	grep  GCF_009858895.2_ASM985889v3_protein.faa | head -5
-
-> Here we are using a pipe, designated by **`|`** to pass the capture the output of grep and pass it to another command (**`head`**).
+> Here we are using a pipe, designated by **`|`** to capture the output of grep and pass it to another command (**`head`**).
 > Piping is a really useful skill to learn for parsing and processing data more efficiently.
 > Note that you can string many pipes together, if necessary. As is the case for most operations conducted in Linux, there are multiple ways to do things.
 > Use the manual page for grep to find an alternative way to obtain the first five header lines (**`man grep`**).
+
+<br>
+
+Count the number of sequences in the fasta file using a pipe to `wc` instead.
+
+	grep ">" wnv_contextual.fasta | wc -l
+
+ > Here we are passing the output of **`grep`** to the word count command, **`wc`**.  The **`-l`** argument specifies that we want to count lines.
+> Again, there is more than one way to achieve the same outcome in Linux.
 
 <br>
 
@@ -421,11 +403,7 @@ Count the number of occurrences of **`CDS`** there are in the third field of the
 ## Bash for loops
 
 
-Bash for loops are basically little shell scripts that you are executing from the command line (Bash is a type of shell, and shells are basically
-little programs for interpreting your commands). Like all loops, they allow you to automate iterative processes.
-For example, instead of opening 200 hundred fasta files and manually changing the definition lines in each,
-
-I can run a for loop that will open each fasta file and make the changes that I specify.
+Bash for loops are basically little shell scripts that you are executing from the command line (Bash is a type of shell, and shells are little programs for interpreting your commands). Like all loops, they allow you to automate iterative processes. For example, instead of opening 200 hundred fasta files and manually changing the definition lines in each, I can run a for loop that will open each fasta file and make the changes that I specify.
 
 The basic syntax is:
 
@@ -439,6 +417,18 @@ The basic syntax is:
 
 <br>
 
+Use a 'for loop' to decompress all of your files at once:
+
+
+	for filn in *gz; do gzip -d $filn; done
+
+
+> Here we used a for loop and the greedy metacharacter, **`*`**. The special **`*`** character represents any character any number of times.
+> For now, examine the contents of your files with **`head`**, **`tail`**, or **`more`**.
+> Fasta files have a Definition Line or Header, with the sequence name proceeded by a **`>`**, followed by the sequence starting on the next line.
+> GFF files have a standard format as well with each field/column (separated by tabs), which contain specific information about the entry.
+> For example, the 4th and 5th fields of a gff file always contain the start and stop coordinates for the entry.
+> Each line contains information on an entry, such as a gene or coding sequence.
 
 ## Regular expressions (regex) and special characters (metacharacters)
 
