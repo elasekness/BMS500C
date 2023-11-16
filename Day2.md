@@ -158,4 +158,38 @@ You can view the alignment file with `samtools`.  The SAM file is yet another ta
 
 	samtools view wnv[A-G].sorted.bam | more
 
- 
+> We pipe the output of the `samtools` command to `more` for easier viewing.
+> This is a good time to practice using `cut`, `sort`, and `uniq` commands for getting a quick sense of your data.
+* Can you get a sense of the average mapping quality of your reads? **Hint**: mapping quality is contained in the 5th field
+
+Now generate some summary statistics for your alignment file.
+
+	samtools flagstat wnv[A-G].sorted.bam
+
+> This command provides some useful information on the number of reads that mapped or didn't map to your reference
+> genome, how many R1 and R2 reads mapped, and how many mates are properly paired with each other
+* Do you think the reference genome was an appropriate choice for your WNV library?
+
+Determine coverage and depth of coverage.
+
+	samtools coverage wnv[A-G].sorted.bam
+
+* Based on average read depth, genome coverage, and mean mapping quality, do you think you have a high-quality alignment?
+
+Now let's try an alternative way of calculating average read depth.
+
+	samtools depth -aa wnv[A-G].sorted.bam > wnv[A-G].depth.txt
+
+> We use the **`-aa`** flag to indicate that we want all positions in the output, including those with zero-depth.
+> We use **`-d 0`** to indicate that we don't want a depth limit (the default cuts the depth off at 8000 reads).
+> Once again, we have a tab delimited file specifying the contig name, the position, and the depth.
+
+Now use `awk` to cut the third field, add each successive line to the last, and divide the sum by the length of the reference genome.
+
+	awk -F '\t' '{sum += $3} END {print sum/11209}' wnv[A-G].depth.txt
+
+> AWK is a scripting language that allows you to parse a file line by line and perform some operation on those parsed lines based on the statement provided in the **`awk`** command.  Here, we are specifying a field **`-F`** to search, which is a tab **`\t`**.  The next statement indicates that we should take the third field of each line **`$3`** and add the value in this field to a variable called **`sum`**.  The `$3` is itself a variable for the content of each third field encountered by awk.  We end the statement and then issue another statement to print the sum divided by the length of the reference genome, which is 11209 base pairs.
+> The syntax for an `awk` statement is below:
+	awk options 'selection_criteria {action}' file
+> For more on [awk](https://www.geeksforgeeks.org/awk-command-unixlinux-examples/)
+* Does the average depth you calculated match the result from `samtools`?
