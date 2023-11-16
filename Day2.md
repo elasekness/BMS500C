@@ -153,3 +153,9 @@ Create an index of your reference genome.
 Align your reads to the reference genome with BWA, pipe the output to samtools to sort the reads by their coordinates and to convert to a binary format. Note that we could also use compressed fastq files.
 
 	bwa HQ596519.fasta wnv[A-G]_val_1.fastq wnv[A-G]_val_2.fastq | samtools sort -o wnv[A-G].sorted.bam
+
+You can view the alignment file with `samtools`.  The SAM file is yet another tab delimited file where each line contains information on the read or its mate, mapping location, mapping quality, etc.
+
+	samtools view wnv[A-G].sorted.bam | more
+
+ 
