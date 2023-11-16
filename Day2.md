@@ -189,9 +189,18 @@ Now use `awk` to cut the third field, add each successive line to the last, and 
 	awk -F '\t' '{sum += $3} END {print sum/11209}' wnv[A-G].depth.txt
 
 > AWK is a scripting language that allows you to parse a file line by line and perform some operation on those parsed lines based on the statement provided in the **`awk`** command.  Here, we are specifying a field **`-F`** to search, which is a tab **`\t`**.  The next statement indicates that we should take the third field of each line **`$3`** and add the value in this field to a variable called **`sum`**.  The `$3` is itself a variable for the content of each third field encountered by awk.  We end the statement and then issue another statement to print the sum divided by the length of the reference genome, which is 11209 base pairs. <br>
-> The syntax for an `awk` statement is below:
+> The syntax for an `awk` statement is below (and see here for more on [awk](https://www.geeksforgeeks.org/awk-command-unixlinux-examples/):
 
 	awk options 'selection_criteria {action}' file
  
-> For more on [awk](https://www.geeksforgeeks.org/awk-command-unixlinux-examples/)
 * Does the average depth you calculated match the result from `samtools`?
+
+<br>
+
+
+## Single nucleotide variant (SNV) calling
+A single nucleotide variant (SNV) is a substitution of one nucleotide for another with respect to our reference genome. A single nucleotide polymorphism (SNP) is an SNV present in at least 1% of the population but the terms are often used interchangeably.  Other types of variation include insertions and deletions (INDELS), which we will not be identifying. There are several tools that will perform variant calling.  We will use bcftools.
+
+	bctools mpileup -q 30 -A -d 100000 -f HQ596519.fasta wnv[A-Z].sorted.bam | bcftools call -m -v -V indels --ploid 1 > wnv[A-Z].vcf
+
+ 
