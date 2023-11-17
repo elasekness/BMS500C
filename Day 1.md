@@ -41,7 +41,7 @@ First, determine the name and location of your home directory.
 	echo $HOME
 
 > **`echo`** = repeat, **`$HOME`** = variable name for your home directory and its location on the server. <br>
-> Try the `echo` command with other variable names, such as **`$SHELL`** or **`$PATH`**.
+> Try the **`echo`** command with other variable names, such as **`$SHELL`** or **`$PATH`**.
 
 <br>
 
@@ -71,7 +71,7 @@ Change (move) to a different directory.
 
 > **`cd`** = change directory. Use **`../`** or **`..`** to move up one directory (back to your home directory). What does **`cd`** alone do? <br>
 > You can think of changing directories as physically moving from on directory to another, which means your point of reference has changed. This will become more evident in the upcoming examples. <br>
-> For now, try listing the contents of the directory above yours from your home directory. Then cd to the directory above yours and list the contents of your home directory.
+> For now, try listing the contents of the directory above yours from your home directory. Then `cd` to the directory above yours and list the contents of your home directory.
 
 <br>
 
