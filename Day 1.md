@@ -40,7 +40,7 @@ First, determine the name and location of your home directory.
 
 	echo $HOME
 
-> **`echo`** = repeat, **`$HOME`** = variable name for your home directory and its location on the server.
+> **`echo`** = repeat, **`$HOME`** = variable name for your home directory and its location on the server. <br>
 > Try the `echo` command with other variable names, such as **`$SHELL`** or **`$PATH`**.
 
 <br>
@@ -87,7 +87,7 @@ Examine the permissions of your 'genomes' directory.
 
 	ls -lh genomes
 
-> **`ls -l`** = long list, providing you information on when the **`genomes`** directory was created and its associated permissions.
+> **`ls -l`** = long list, providing you information on when the **`genomes`** directory was created and its associated permissions. <br>
 > the **`-h`** specifies that the output be in human-readable format.
 
 <br>
