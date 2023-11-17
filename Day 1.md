@@ -16,10 +16,14 @@ To `ssh` you need an account on the server with a username and password as well 
 - Once connected to the console, click the Compute Engine link and start your VM by expanding the three dot icon to the right
 - Click the SSH button once the VM has started. This will open a terminal window on your VM.
 
+<br>
+
 To perform any operations in a Linux environment, we need to tell the computer what to do by typing specific commands into our terminal window.
 In general, the syntax will be: `Command File`,
 where `Command` is the function or operation you want to perform on the` File` or `Directory`
 that you specify. Sometimes specifying a command is all we need.
+
+<br>
 
 Examine the contents of your directory with:
  
@@ -71,16 +75,19 @@ Change (move) to a different directory.
 
 > **`cd`** = change directory. Use **`../`** or **`..`** to move up one directory (back to your home directory). What does **`cd`** alone do? <br>
 > You can think of changing directories as physically moving from on directory to another, which means your point of reference has changed. This will become more evident in the upcoming examples. <br>
-> For now, try listing the contents of the directory above yours from your home directory. Then `cd` to the directory above yours and list the contents of your home directory.
+> For now, try listing the contents of the directory above yours from your home directory. Then **`cd`** to the directory above yours and list the contents of your home directory.
 
 <br>
 
+
 ## Permissions
+
 
 Directories and files have specific permissions associated with them or things that you are allowed to do to them.
 There are three permissions: 1) the ability to read (r) 2) the ability to write (w) and 3) the ability to execute (a script or program; x).
 There three sets of permissions representing 1) the User (you), 2) the group (multiple users),
 and 3) Others (Everyone else in the world).
+
 <br>
 
 Examine the permissions of your 'genomes' directory.
@@ -114,12 +121,14 @@ Similarly, we can view and edit files in a text editor or we can print their con
 As a general rule, it's always good to examine some of the contents of your file to ensure you've generated the results you want in the
 format you want. Or that you are using the correct file and format for downstream applications.
 
+<br>
+
 Redirect STDOUT to a file.
 
 	ls /usr/bin > programs.txt
 
 > The path **`/usr/bin`** specifies the location where various Bash commands are found. When you type a command, **`/usr/bin`** is one of the locations your computer searches to find and execute the command. <br>
-> Was **`/usr/bin`** part of your **`$PATH`**? <b>
+> Was **`/usr/bin`** part of your **`$PATH`**? <br>
 > Here we are redirecting the STDOUT from the **`ls`** command to a file named **`programs.txt`**. The **`>`** sign is responsible for the redirection.
 
 <br>
@@ -153,7 +162,6 @@ Display the last ten lines of your file.
 
 Print the entire contents of your file to your screen.
 
-
 	cat programs.txt
 
 > **`cat`** = concatenate.  The **`cat`** command can also join the contents of multiple files together.
@@ -167,6 +175,9 @@ The files are located in different subdirectories within the directory entitled 
 located in the `/home` directory. We will have to specify the path to these files.  We can specify an absolute path, which is the location
 of these files with respect to the root directory (i.e. going through the entire filesystem to get to your file) or a relative path, which is
 where these files are located with respect to your current working directory (i.e. where you are when you enter `pwd`).
+
+<br>
+
 Let's try using absolute and relative paths.
 
 	cp /home/BMS500-2023/genomes/wnv_contextual.fasta genomes
@@ -174,12 +185,16 @@ Let's try using absolute and relative paths.
 > **`cp`** = copy. <br>
 > Here we used the absolute path to copy the fasta file `wnv_contextual.fasta` to our `genomes` directory.
 
+<br>
+
 Now `cd` into your `reference` directory and use a relative path to copy the reference fasta file (HQ596519.fasta) to where you are.
 
 	cp ../../BMS500-2023/reference/HQ596519.fasta .
 
 > Notice that we had to move up two directories to get to `BMS500-2023`. <br>
 > Also notice that we must always specify an end location for our copied files but in this case, we are copying the file to our current location, which is specified with a dot `.`.
+
+<br>
 
 View and edit the contents of a file with a text editor. Let's open our reference fasta file and change the sequence name to 'reference.'
 
@@ -213,6 +228,7 @@ Remove a file. Let's remove files we don't need.
 > How would you remove a directory?
 
 <br>
+
 
 ## Notes on working in a Linux environment
 
@@ -248,6 +264,8 @@ Choose 'Nucleotide' under the top left pull-down menu (set to 'All Databases' by
 We could download this sequence to our computers and then upload it to our VMs but this is a two-step process.
 An easier way would be to use one of NCBI's tools for interacting with their databases.
 
+<br>
+
 Return to your VM terminal and type:
 
 	efetch --help
@@ -255,11 +273,15 @@ Return to your VM terminal and type:
  > This brings up a long menu of options for the efetch tool, which can be used to download a variety of data in different formats from NCBI. <br>
 > The relevant arguments for us will be the database `-db` we want to search, the format `-format` of the data, and the `-id` of our query, which is the accession of our WNV reference gnome.
 
+<br>
+
 Let's download our sequence and redirect STDOUT to a file.
 
 	efetch -db nuccore -format fasta -id HQ596519 > HQ596519.fasta
 
  > Remember that STDOUT is output from a command that gets printed to your screen while the `>` symbol redirects this output to a file.
+
+<br>
 
 Although we aren't working with eukaryotic or prokaryotic genomes, it's worth mentioning that there is a command-line
 tool to download these as well: the **`datasets`** command-line tool. A help menu will appear if you type **`datasets`** without any arguments.  Typing **`datasets download`** will give you additional information on how to use this command, which shows the option to download a genome by its accession.  
@@ -268,6 +290,7 @@ tool to download these as well: the **`datasets`** command-line tool. A help men
 As you can see, there are usually multiple ways to solve a problem in bioinformatics.
 
 <br>
+
 
 ## Obtaining reads from the SRA
 
@@ -280,6 +303,7 @@ This brings you to a page with additional information on the sequencing run as w
 
 By clicking on the link to the run [SRR17262079](https://trace.ncbi.nlm.nih.gov/Traces/?view=run_browser&acc=SRR17262079&display=metadata), we could download the two fastq files associated with this run and then upload them to our VM or we could use faster tools provided by NCBI.
 
+<br>
 
 Use **`prefetch`** and **`fasterq-dump`** tools from the SRA toolkit to download the fastq files for SRR17262079.
 
@@ -294,6 +318,7 @@ Use **`prefetch`** and **`fasterq-dump`** tools from the SRA toolkit to download
 If you haven't done so already, try moving your fastq files to your `fastq` directory from your current location.
 
 <br>
+
 
 ## Manipulating data: Parsing files, modifying content, and piping
 
@@ -315,6 +340,8 @@ Piping is specified by **`|`** and simply pipes the STDOUT from one command to a
 > The **`-c`** option counts the number of lines that contain the search pattern instead of returning the lines. <br>
 > Try **`grep`** without the **`-c`** argument to see the difference. <br>
 > Combined with metacharacters, **`grep`** is a powerful way to search your document for complicated patterns.
+
+<br>
 
 Grab the first 5 header lines from your fasta file with `grep` and a pipe.
 
@@ -363,6 +390,7 @@ As you can see (but not very well) **`sed`** will print your entire document to 
 
 
 ## More piping
+
 
 Let's try some more complicated parsing of our data using various Bash commands and pipes. First, copy the annotation file (HQ596519.gff3) for our reference genome from the `BMS50-2023` directory to your `reference` directory and take a quick view of the gff file (using `head`, `more` or some other option).  A gff file is a tab delimited file that provides a description of the genes, the function of the coding sequences, and the start and stop positions of the genes (and other features) in the genome. One genome feature is listed per line. The lines don't fit on our screen, making it difficult to visualize.
 
