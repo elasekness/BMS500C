@@ -362,7 +362,7 @@ Compare the consensus genomes created by bcftools and ivar. We will first concat
 
 > Our consensus genomes should be the same length so they should already be aligned but we'll align anyway for good practice. <br>
 > By default **`snp-dists`** does not count ambiguous positions. <br>
-* Where there any differences between these two genomes?
+* Were there any differences between these two genomes?
 * Now include ambiguous positions in the tally.
 * Did bcftools assign a reference call to a position that should be considered low-quality?
 
