@@ -33,12 +33,15 @@ Examine the contents of your directory with:
 
 <br>
 
+
 ## Directory structure and navigation
 
 Directories are folders with specific locations on the server.
 To navigate from one directory to another, we must specify the location of the directory or its path.
 Directories have a forward slash `/` after their names.  Thus to get to a subdirectory within a directory
 you would specify the path by stringing together the directory names, separated by `/`. We'll practice below
+
+<br>
 
 First, determine the name and location of your home directory.
 
@@ -106,7 +109,6 @@ Change the permissions associated with your `genomes` directory with the 'chmod'
 > Permissions are represented by three-digit (for user, group, and other) octal numbers.
 > Here we are allowing the user and group universal permissions (7 = read, write, and execute) and all others
 > the ability to read and write only (5).
-
 > For more information on permissions, see: [Linux permissions](https://www.guru99.com/file-permissions.html#linux_file_ownership)
 
 <br>
@@ -334,8 +336,6 @@ Piping is specified by **`|`** and simply pipes the STDOUT from one command to a
 
 	grep -c ">" wnv_contextual.fasta
 
- <br>
-
 > **`grep`** = global regular expression print.  Grep searches a file line-by-line for patterns that you specify and returns every line containing that pattern. <br>
 > The **`-c`** option counts the number of lines that contain the search pattern instead of returning the lines. <br>
 > Try **`grep`** without the **`-c`** argument to see the difference. <br>
@@ -398,7 +398,6 @@ Let's try some more complicated parsing of our data using various Bash commands 
 
 Extract all coding sequences (CDS) and view their start and stop positions with a combination of 'grep' and 'cut.'
 
-
 	grep "CDS" HQ596519.gff3 | cut -f 3,4,5
 
 > We have searched for every line that contains **`CDS`** and cut those lines on the third, fourth, and fifth delimiters (delimiters can be anything but the default is a tab).
@@ -441,6 +440,8 @@ Count how many mature protein coding regions are on the positive strand (informa
 
 Bash for loops are basically little shell scripts that can be excecuted from the command line (Bash is the command-line language we are using). Like all loops, they allow you to automate iterative processes. For example, instead of opening 200 hundred fasta files and manually changing the definition lines in each, I can run a for loop that will open each fasta file and make the changes that I specify.
 
+<br>
+
 The basic syntax is:
 
 	for FILE in *common_file_ending; do command $FILE; done
@@ -454,9 +455,7 @@ The basic syntax is:
 
 Use a 'for loop' to count the lines in your reference fasta and gff file:
 
-
 	for filn in HQ*; do wc -l $filn; done
-
 
 > Here we use the greedy metacharacter, **`*`** to specify that we want to count the lines of all files begining with 'HQ'. <br>
 > Note that you don't actually need a loop to count the lines in both files.
