@@ -9,9 +9,12 @@ This includes using software that I have pre-installed on the VM as well as cont
 software pulled from Docker. Finally, you will learn about GitHub and Docker for obtaining and installing bioinforamtics software.
 <br>
 
+
 ## Some general information
 
 Our read data are in fastq format. Fastq files contain the quality score for each nucleotide in the read and each read has four lines associated with it:
+
+<br>
 
 	@SRR10971381.1 1 length=151
 	AGTCGATCAGCTGAGTACTAGTAGCATG
@@ -108,6 +111,8 @@ Each student will map the paired-end (PE) fastqs from one sample to the referenc
 | Student6 | wnvF |
 | Student7 | wnvG |
 
+<br>
+
 Copy the fastq files for your sample from the `BMS500C-2023` directory to your `fastq` directory. Assuming you're in your home directory an example command would look like this:
 
 	cp ../BMS500C-2023/fastq/wnv[A-G]*fastq fastq
@@ -145,15 +150,21 @@ Remove adapters from your reads and keep only those reads passing quality metric
 
 We will map our reads to the HQ596519 reference genome with [BWA](http://bio-bwa.sourceforge.net">http://bio-bwa.sourceforge.net) (Burrows-Wheeler Aligner), a short-read aligner tool. Most short-read aligners rely on breaking reads into K-mers (shorter sequences of a specified length), aligning these to the reference genome, and extending these seeds with some amount of base misincorporation. This is actually faster than aligning the entire read. BWA outputs the alignment information in a [SAM](https://samtools.github.io/hts-specs/SAMv1.pdf) format. The output from BWA will need to be saved in a file, converted to a binary format, and sorted by read position in the genome (or coordinate) for additional analyses, such as variant calling.  While we could do each step individually, we can also pipe these commands together for faster processing and to avoid generating intermediate files that we would later delete.
 
+<br>
+
 Create an index of your reference genome.
 
 	bwa index HQ596519.fasta
 
  > Notice the additional files created with this command. Indexing is employed to improve the speed of the mapping algorithm. You can think of it as a look-up table that allows you to more efficiently identify the location of shorter sequences (your kmers) in a longer sequence.
 
+<br>
+
 Align your reads to the reference genome with BWA, pipe the output to samtools to sort the reads by their coordinates and to convert to a binary format. Note that we could also use compressed fastq files.
 
 	bwa HQ596519.fasta wnv[A-G]_val_1.fastq wnv[A-G]_val_2.fastq | samtools sort -o wnv[A-G].sorted.bam
+
+<br>
 
 You can view the alignment file with `samtools`.  The [SAM](https://samtools.github.io/hts-specs/SAMv1.pdf) file is yet another tab delimited file where each line contains information on the read or its mate, mapping location, mapping quality, etc.
 
@@ -161,7 +172,9 @@ You can view the alignment file with `samtools`.  The [SAM](https://samtools.git
 
 > We pipe the output of the `samtools` command to `more` for easier viewing.
 > This is a good time to practice using `cut`, `sort`, and `uniq` commands for getting a quick sense of your data.
-* Can you get a sense of the average mapping quality of your reads? **Hint**: mapping quality is contained in the 5th field
+* Can you get a sense of the average mapping quality of your reads? **Hint**: mapping quality is contained in the 5th field.
+
+<br>
 
 Now generate some summary statistics for your alignment file.
 
@@ -171,11 +184,15 @@ Now generate some summary statistics for your alignment file.
 > genome, how many R1 and R2 reads mapped, and how many mates are properly paired with each other
 * Do you think the reference genome was an appropriate choice for your WNV library?
 
+<br>
+
 Determine coverage and depth of coverage.
 
 	samtools coverage wnv[A-G].sorted.bam
 
 * Based on average read depth, genome coverage, and mean mapping quality, do you think you have a high-quality alignment?
+
+<br>
 
 Now let's try an alternative way of calculating average read depth.
 
@@ -184,6 +201,8 @@ Now let's try an alternative way of calculating average read depth.
 > We use the **`-aa`** flag to indicate that we want all positions in the output, including those with zero-depth. <br>
 > We use **`-d 0`** to indicate that we don't want a depth limit (the default cuts the depth off at 8000 reads). <br>
 > Once again, we have a tab delimited file specifying the contig name, the position, and the depth.
+
+<br>
 
 Now use `awk` to cut the third field, add each successive line to the last, and divide the sum by the length of the reference genome.
 
@@ -203,7 +222,11 @@ Now use `awk` to cut the third field, add each successive line to the last, and 
 
 
 ## Single nucleotide variant (SNV) calling
-A single nucleotide variant (SNV) is a substitution of one nucleotide for another with respect to our reference genome. A single nucleotide polymorphism (SNP) is an SNV present in at least 1% of the population but the terms are often used interchangeably.  Other types of variation include insertions and deletions (INDELS), which we will not be identifying. There are several tools that will perform variant calling.  We will use [Bcftools](https://samtools.github.io/bcftools/).
+A single nucleotide variant (SNV) is a substitution of one nucleotide for another with respect to our reference genome. A single nucleotide polymorphism (SNP) is an SNV present in at least 1% of the population but the terms are often used interchangeably.  Other types of variation include insertions and deletions (INDELS), which we will not be identifying. There are several tools that will perform variant calling.  
+
+<br>
+
+We will use [Bcftools](https://samtools.github.io/bcftools/).
 
 	bctools mpileup -q 30 -d 100000 -f HQ596519.fasta wnv[A-Z].sorted.bam | bcftools call -m -v -V indels --ploid 1 > wnv[A-Z].vcf
 
@@ -216,10 +239,13 @@ A single nucleotide variant (SNV) is a substitution of one nucleotide for anothe
 > **`-V`** = do not consider INDELs <br>
 > Notice that the output is in the tab delimited [VCF](https://samtools.github.io/hts-specs/VCFv4.2.pdf) format.
 
+<br>
+
 Take a look at your vcf file. The begining of the file is devoted to descriptions of the information contained therein; these lines being with a '#'.  After each line contains information on a position with a variant call, including the reference contig, the position, the reference and alternative nucleotides at this position, and the quality of the call (bigger is better). The 'Format' field contains additional information that you can use to assess whether the variant call is real or a false positive (for example, do to a poor assembly or a repetitive region). The four numbers after `DP4` indicate the number of high quality forward and reverse reads that support the reference nucleotide and the number of forward and reverse reads that support the alternative, respectively. 
 
-Do all variant calls appear to be high-quality or should some be excluded?  
-Would we want to include low-frequency variants in a consensus genome?
+Do all variant calls appear to be high-quality or should some be excluded?  Would we want to include low-frequency variants in a consensus genome?
+
+<br>
 
 There are many different criteria you could use to filter a vcf file. And these criteria will likely change depending on the goals of the project and the organism or population of study.  Let's use another function of `bcftools` to filter our vcf files by minimum quality and depth criteria.
 
@@ -230,14 +256,101 @@ There are many different criteria you could use to filter a vcf file. And these 
 * How many variants are high-quality?
 * How many variants are in your vcf?
 * Are there still low frequency variants that you would exclude?
-* Can you create a command with grep, sed, and awk that would grab the F and R depths for REF and ALT and calculate the frequency of ALT?
+* Can you create a command with grep, sed, and awk that would grab the F and R depths for REF and ALT and calculate the frequency of ALT? Don't peak but here is the [answer](https://github.com/elasekness/BMS500C/blob/main/Answers.md).
+
+<br>
 
 Now let's generate our consesus genome sequence. The first steps are two index our reference genome and compress and index our vcf file.
 
 	samtools faidx HQ596519.fasta
  	bcftools convert -O z wnv[A-G].vcf -o wnv[A-G].vcf.gz
   	bcftools index wnv[A-G].vcf.gz
+   	bcftools consensus -H A -i 'QUAL>220 && DP>100' -f HQ596519.fasta -p wnv[A-G]_ wnv[A-G].vcf.gz > wnv[A-G].fasta
 
 > The **`-O`** in the **`bcftools convert`** command specifies the format of the output, which is `z` for compressed vcf
+> The **`-H`** in the **`bcftools consensus`** command specifies that we want to apply the alternative **`A`** allele to our consensus genome. <br>
+> The **`-i`** selects sites which meet the filtering criteria specified (the same as in our query statement). <br>
+> The **`-p`** appends a prefix to the name of our consensus sequence (otherwise it will be named for the reference). <br>
+> Essentially, we are using the reference as a backbone for our consensus sequence and subsituting the alternative nucleotide at variant positions.  Unfortunately, with this strategy, positions with no coverage are assigned the reference nucleotide, which may or may not be correct.
 
-	
+<br>
+
+Now try using [iVar](https://github.com/andersen-lab/ivar) -a tool designed for viral assemblies- to generate a consensus genome. But before we do, let's talk about Docker containers.
+
+<br>
+
+
+## Docker
+
+A Docker container image is essentially like a little VM that contains code for an application and all of its dependencies. Thus, Docker containers should run the same way on any Linux machine. This is valuable because software is often difficult to compile from source code.  Docker containers also eliminate issues with versioning, such that you can run docker containers of multiple versions of the same program without running into problems with conflicting dependencies. A docker image is the static instructions for making the running container. The image creates the container instance. Conveniently, Docker has already been installed for us on our machines.
+
+Docker images can be 'pulled' from repositories on [Docker hub](https://hub.docker.com/) 
+Anyone with a Docker account can create a repository for software that they have containerized.
+Two repositories that I pull from frequently are [staphb](https://github.com/StaPH-B/docker-builds) and 'biocontainers.'
+
+Two commands that you will use are **`docker pull`** and **`docker run`**
+
+The command: **`docker pull staphb/ivar`**, will pull the latest image of iVar from the staphb repository registered on Docker Hub.
+You can specify another version with tags: **`docker pull staphb/spades:3.12.0`**, pulls an image for spades (a de novo assembler) version 3.12.0
+<br>
+The **`docker run`** command will:
+* initiate Docker client talking to docker daemon
+* pull image if not found locally by Docker daemon
+* start new container from image (i.e. run the image as a container)
+* execute specified command
+<br>
+The docker run command essentially converts our image to a container.  To actually execute our command
+on our files, we need to make them visible to the container.  Thus, we must mount a working directory inside the VM. To do this, we will use two arguments with our run command:
+
+**`-v $(pwd):/data`** mounts our current directory to the VM (it will also create a directory called 'data' if it doesn't exist).
+**`-w /data`** allows the command being executed to run in the directory specified.
+
+When the container runs, it's being run as the 'root' user. We can change this but the default is fine for now.
+The only issue is that the output produced will be owned by 'root', not by us.  Thus, we will have read-only permissions.  This shouldn't generally be a problem because we aren't altering most of our output files, but we can always change the permissions with a **`sudo chmod`** command.
+
+<br>
+
+For an additional Docker tutorial see [https://github.com/PawseySC/bio-workshop-18](https://github.com/PawseySC/bio-workshop-18)
+
+<br>
+
+See what docker images are already on your VM.
+
+	docker images
+
+> You should see that the staphb image for ivar (staphb/ivar:latest) is already on our VMs.
+
+<br>
+
+You can run your docker container interactively (from within the container).  Let's do this to understand how iVar works.
+
+	docker run --rm -it staphb/ivar
+
+> You are now within the container, which has Linux, iVar, and all of iVar's dependencies installed.  Thus, we can use the same Bash commands that we've been using to navigate around the filesystem and bring up the iVar help menu by typing the `ivar` command. <br>
+> **`-it`** = i for interactive mode, and t for emulating a terminal inside the container
+> **`--rm`** removes the new container instead of storing it on your computer. <br>
+> To exit the container, type: **`ctr-d`**.
+
+<br>
+
+You might have noticed that the `ivar consensus` command actually takes the output piped from samtools. This means we must issue two docker run commands to the staphb/ivar image and specify piped output with the `-i` argument. If ivar were install on our VMs, the command would look like this:
+
+	samtools mpileup -aa -A -d 0 -Q 0 wnv[A-G].sorted.bam | ivar consensus -t 0.9 -m 100 -n N -p wnv[A-G]
+
+> `samtools mpileup` is providing the genotype likelihoods <br>
+> `ivar consensus` is creating the consensus sequence with the following parameters: <br>
+> `-t` = minimum frequency threshold to call a consensus (alt or ref must be supported by this mininum) <br>
+> `-m` = minimum depth to call a consensus <br>
+> `-n` = if depth is below minimum, position is ambiguous <br>
+> `-p` = prefix of fasta ouput file <br>
+
+<br>
+
+To run the dockerized version of this command, we need both `docker run` and `ivar` commands.
+
+	docker run --rm -v $(pwd):/data -w /data staphb/ivar ivar mpileup -aa -A -d 0 -Q 0 wnv[A-G].sorted.bam | docker run -i --rm -v $(pwd):/data -w /data staphb/ivar ivar consensus -t 0.9 -m 100 -n N -p wnv[A-G]
+
+
+
+
+
