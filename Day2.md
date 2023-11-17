@@ -350,7 +350,20 @@ To run the dockerized version of this command, we need both `docker run` and `iv
 
 	docker run --rm -v $(pwd):/data -w /data staphb/ivar ivar mpileup -aa -A -d 0 -Q 0 wnv[A-G].sorted.bam | docker run -i --rm -v $(pwd):/data -w /data staphb/ivar ivar consensus -t 0.9 -m 100 -n N -p wnv[A-G]
 
+> Your consensus genome will be save in the fasta file, wnv[A-G].fa 
 
+<br>
 
+Compare the consensus genomes created by bcftools and ivar. We will first concatenate our two fasta files into a single file, align the genomes in both with [mafft](https://mafft.cbrc.jp/alignment/software/), and count the number of SNPs with [snp-dists](https://github.com/tseemann/snp-dists).
+
+	cat wnv[A-G].fasta wnv[A-G].fa > both_genomes.fasta
+ 	mafft both_genomes.fasta > both_genomes.aln.fasta
+  	snp-dists both_genomes.aln.fasta
+
+> Our consensus genomes should be the same length so they should already be aligned but we'll align anyway for good practice. <br>
+> By default **`snp-dists`** does not count ambiguous positions. <br>
+* Where there any differences between these two genomes?
+* Now include ambiguous positions in the tally.
+* Did bcftools assign a reference call to a position that should be considered low-quality?
 
 
