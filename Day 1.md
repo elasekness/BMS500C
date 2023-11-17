@@ -69,10 +69,9 @@ Change (move) to a different directory.
 
 	cd genomes
 
-> **`cd`** = change directory. Use **`../`** or **`..`** to move up one directory (back to your home directory). What does **`cd`** alone do?
-> You can think of changing directories as physically moving from on directory to another, which means your point of reference has changed.
-> This will become more evident in the upcoming examples. For now, try listing the contents of the directory above yours from your home directory.
-> Then cd to the directory above yours and list the contents of your home directory.
+> **`cd`** = change directory. Use **`../`** or **`..`** to move up one directory (back to your home directory). What does **`cd`** alone do? <br>
+> You can think of changing directories as physically moving from on directory to another, which means your point of reference has changed. This will become more evident in the upcoming examples. <br>
+> For now, try listing the contents of the directory above yours from your home directory. Then cd to the directory above yours and list the contents of your home directory.
 
 <br>
 
@@ -119,8 +118,8 @@ Redirect STDOUT to a file.
 
 	ls /usr/bin > programs.txt
 
-> The path **`/usr/bin`** specifies the location where various Bash commands are found. When you type a command, **`/usr/bin`** is one of the locations
-> your computer searches to find and execute the command. Was **`/usr/bin`** part of your **`$PATH`**?
+> The path **`/usr/bin`** specifies the location where various Bash commands are found. When you type a command, **`/usr/bin`** is one of the locations your computer searches to find and execute the command. <br>
+> Was **`/usr/bin`** part of your **`$PATH`**? <b>
 > Here we are redirecting the STDOUT from the **`ls`** command to a file named **`programs.txt`**. The **`>`** sign is responsible for the redirection.
 
 <br>
@@ -129,8 +128,8 @@ Scroll through the contents of your file.
 
 	more programs.txt
 
-> Scroll through line-by-line with the enter key.  Scroll through page-by-page with the space key.
-> Do you notice that the file contains some of the commands you have just used?
+> Scroll through line-by-line with the enter key.  Scroll through page-by-page with the space key. <br>
+> Do you notice that the file contains some of the commands you have just used? <br>
 > Exit with **`control-c`**.
 
 <br>
@@ -139,10 +138,10 @@ Display the first ten lines of your file.
 
 	head programs.txt
 
-> **`head`** displays the first ten lines by default but you can specify the number of lines with a flag.
+> **`head`** displays the first ten lines by default but you can specify the number of lines with a flag. <br>
 > For example, **`head -200 programs.txt`** will display the first two hundred lines of your file. In general, most
-> commands have additional arguments (or flags) associated with them. You can see the different usage statements
-> by typing the command with a **`-help`** or **`--help`** option.
+> commands have additional arguments (or flags) associated with them. <br>
+> You can see the different usage statements by typing the command with a **`-help`** or **`--help`** option.
 
 <br>
 
@@ -172,24 +171,24 @@ Let's try using absolute and relative paths.
 
 	cp /home/BMS500-2023/genomes/wnv_contextual.fasta genomes
 
-> **`cp`** = copy.
+> **`cp`** = copy. <br>
 > Here we used the absolute path to copy the fasta file `wnv_contextual.fasta` to our `genomes` directory.
 
 Now `cd` into your `reference` directory and use a relative path to copy the reference fasta file (HQ596519.fasta) to where you are.
 
 	cp ../../BMS500-2023/reference/HQ596519.fasta .
 
-> Notice that we had to move up two directories to get to `BMS500-2023`.
-> Also notice that we must always specify an end location for our copied files but in this case, we are copying the file to our current location, 
-> which is specified with a dot `.`.
+> Notice that we had to move up two directories to get to `BMS500-2023`. <br>
+> Also notice that we must always specify an end location for our copied files but in this case, we are copying the file to our current location, which is specified with a dot `.`.
 
 View and edit the contents of a file with a text editor. Let's open our reference fasta file and change the sequence name to 'reference.'
 
 	nano HQ596519.fasta
 
-> Nano, emacs, vim, and vi are all text editors.
-> You can make an empty file on the fly by typing **`nano`** or **`nano filename`**.  This will open a blank text editor screen.
-> Save your changes with **`control-o`**. To exit the text editor, use **`control-x`**.
+> Nano, emacs, vim, and vi are all text editors. <br>
+> You can make an empty file on the fly by typing **`nano`** or **`nano filename`**.  This will open a blank text editor screen. <br>
+> Save your changes with **`control-o`**. <br>
+> To exit the text editor, use **`control-x`**. <br>
 > More information on Nano commands can be found here: 
 > [Nano](https://www.howtogeek.com/howto/42980/the-beginners-guide-to-nano-the-linux-command-line-text-editor/)
 
@@ -199,8 +198,8 @@ Rename a file. Let's rename our reference file to reflect the changes we made in
 
 	mv HQ596519.fasta reference.fasta
 
-> **`mv`** = move. Renaming files with `mv` will overwrite any existing file.  You can also mv a file to a different directory.  
-> Try it: **`mv reference.fasta genomes`**
+> **`mv`** = move. Renaming files with `mv` will overwrite any existing file.  You can also mv a file to a different directory. <br>
+> Try it: **`mv reference.fasta genomes`** <br>
 > Can you move the file back to your home directory?
 
 <br>
@@ -209,8 +208,8 @@ Remove a file. Let's remove files we don't need.
 
 	rm programs.txt
 
-> **`rm`** = remove.  Remember, a removed file cannot be restored.  
-> Can you remove a file from a different directory without having to change directories? 
+> **`rm`** = remove.  Remember, a removed file cannot be restored. <br>
+> Can you remove a file from a different directory without having to change directories? <br>
 > How would you remove a directory?
 
 <br>
@@ -241,8 +240,8 @@ We will focus on NCBI.  Our goal is to download the same reference genome that y
 Navigate to NCBI’s homepage: [https://www.ncbi.nlm.nih.gov/](https://www.ncbi.nlm.nih.gov/)
 
 
-> Notice that there are options to submit sequences, download sequences, and even analyze data.
-> PubMed allows literature searches and BLAST is an alignment tool to look for sequences that are similar (a proxy for homology) to your queries.
+> Notice that there are options to submit sequences, download sequences, and even analyze data. <br>
+> BLAST is an alignment tool to look for sequences that are similar (a proxy for homology) to your queries.
 
 
 Choose 'Nucleotide' under the top left pull-down menu (set to 'All Databases' by default), type West Nile Virus into the search area, and hit enter. This brings us to a page containing over 50,000 nucleotide entries for WNV.  Many of these are only partical genomes or partial coding sequences, which we don't want. We could use the options in the left-side panel to filter the list further but this will be of limited use here. Clearly we need a better strategy.  If we click on the `NCBI Virus` botton located in the taxonomy panel, we are brought to a far more useful page that lists all WNV genomes and allows us to filter the data by several criteria, such as collection date, accession number, genome completeness, and host among others.  Since we know the accession number of our genome, we can type this into the Accession box and our genome appears.  If we click on the genome accession, we obtain more information about the sequence.  If we scroll up to the `Download` button, we can download the nucleotide sequence in fasta format.
@@ -253,7 +252,8 @@ Return to your VM terminal and type:
 
 	efetch --help
 
- > This brings up a long menu of options for the efetch tool, which can be used to download a variety of data in different formats from NCBI. The relevant arguments for us will be the database `-db` we want to search, the format `-format` of the data, and the `-id` of our query, which is the accession of our WNV reference gnome.
+ > This brings up a long menu of options for the efetch tool, which can be used to download a variety of data in different formats from NCBI. <br>
+> The relevant arguments for us will be the database `-db` we want to search, the format `-format` of the data, and the `-id` of our query, which is the accession of our WNV reference gnome.
 
 Let's download our sequence and redirect STDOUT to a file.
 
@@ -286,9 +286,9 @@ Use **`prefetch`** and **`fasterq-dump`** tools from the SRA toolkit to download
 	prefetch SRR17262079
 	fasterq-dump SRR17262079
 
-> **`prefetch`** will download the SRA data in binary format and **`fasterq-dump`** will perform the fastq conversion.
-> Notice that the conversion tool automatically saves forward and reverse reads to separate files.
-> Although we could use fasterq by itself, NCBI claims prefetch in combination with fasterq is faster.
+> **`prefetch`** will download the SRA data in binary format and **`fasterq-dump`** will perform the fastq conversion. <br>
+> Notice that the conversion tool automatically saves forward and reverse reads to separate files. <br>
+> Although we could use fasterq by itself, NCBI claims prefetch in combination with fasterq is faster. <br>
 > More information on the SRA-toolkit and other frequently used tools can be found here: [SRA toolkit](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc)
 
 If you haven't done so already, try moving your fastq files to your `fastq` directory from your current location.
@@ -311,9 +311,9 @@ Piping is specified by **`|`** and simply pipes the STDOUT from one command to a
 
  <br>
 
-> **`grep`** = global regular expression print.  Grep searches a file line-by-line for patterns that you specify and returns every line containing that pattern.
-> The **`-c`** option counts the number of lines that contain the search pattern instead of returning the lines.
-> Try **`grep`** without the **`-c`** argument to see the difference.
+> **`grep`** = global regular expression print.  Grep searches a file line-by-line for patterns that you specify and returns every line containing that pattern. <br>
+> The **`-c`** option counts the number of lines that contain the search pattern instead of returning the lines. <br>
+> Try **`grep`** without the **`-c`** argument to see the difference. <br>
 > Combined with metacharacters, **`grep`** is a powerful way to search your document for complicated patterns.
 
 Grab the first 5 header lines from your fasta file with `grep` and a pipe.
@@ -321,8 +321,8 @@ Grab the first 5 header lines from your fasta file with `grep` and a pipe.
 	grep  ">" wnv_contextual.fasta | head -5
 
 > Here we are using a pipe, designated by **`|`** to capture the output of grep and pass it to another command (**`head`**).
-> Piping is a really useful skill to learn for parsing and processing data more efficiently.
-> Note that you can string many pipes together, if necessary. As is the case for most operations conducted in Linux, there are multiple ways to do things.
+> Piping is a really useful skill to learn for parsing and processing data more efficiently. <br>
+> Note that you can string many pipes together, if necessary. As is the case for most operations conducted in Linux, there are multiple ways to do things. <br>
 > Use the manual page for grep to find an alternative way to obtain the first five header lines (**`man grep`**).
 
 <br>
@@ -331,7 +331,7 @@ Count the number of sequences in the fasta file using a pipe to `wc` instead.
 
 	grep ">" wnv_contextual.fasta | wc -l
 
- > Here we are passing the output of **`grep`** to the word count command, **`wc`**.  The **`-l`** argument specifies that we want to count lines.
+ > Here we are passing the output of **`grep`** to the word count command, **`wc`**.  The **`-l`** argument specifies that we want to count lines. <br>
 > Again, there is more than one way to achieve the same outcome in Linux.
 
 <br>
@@ -341,14 +341,14 @@ Use **`sed`** to rename the definition lines of your fasta file so that only the
 
 	sed "s/|.*//" wnv_contextual.fasta
 
-> **`sed`** = stream editor.  **`sed`** is essentially a search and replace function.
-> Like **`grep`**, we can search for complicated patterns when we use this command with regular expressions. Unlike `grep`, we can replace these complicated patterns with another.
-> The syntax for the search and replace command is **`'s/search pattern/replacement pattern/'`** where the 's' stands for substitute.
-> In our example, the fasta file contains definition lines that begin with genome accessions, proceeded by metadata separated from the accession with a space and a `|`. The format of the metadata varies among the definition lines.
-> We can use a regular expression to replace all of the patterns displayed in the sequence names without having to search for each pattern individually. Regular expressions use characters with special meaning (metacharacters).
-> Like **`grep`**, **`sed`** will search for your pattern line by line. It will make a replacement once (unless you specify otherwise, see the manual page).
-> Here we search for a `|` and everything that proceeds it, specified by two metacharacters: **`.`** and **`*`**. The `.` represents any character one time and the `*` is a greedy character that represents any character any number of times.
-> If we wanted to specify an actual period and not a special character, we would need to escape the metacharacter with a preceeding slash: `\.`
+> **`sed`** = stream editor.  **`sed`** is essentially a search and replace function. <br>
+> Like **`grep`**, we can search for complicated patterns when we use this command with regular expressions. Unlike `grep`, we can replace these complicated patterns with another. <br>
+> The syntax for the search and replace command is **`'s/search pattern/replacement pattern/'`** where the 's' stands for substitute. <br>
+> In our example, the fasta file contains definition lines that begin with genome accessions, proceeded by metadata separated from the accession with a space and a `|`. The format of the metadata varies among the definition lines. <br>
+> We can use a regular expression to replace all of the patterns displayed in the sequence names without having to search for each pattern individually. Regular expressions use characters with special meaning (metacharacters). <br>
+> Like **`grep`**, **`sed`** will search for your pattern line by line. It will make a replacement once (unless you specify otherwise, see the manual page). <br>
+> Here we search for a **`|`** and everything that proceeds it, specified by two metacharacters: **`.`** and **`*`**. The `.` represents any character one time and the `*` is a greedy character that represents any character any number of times. <br>
+> If we wanted to specify an actual period and not a special character, we would need to escape the metacharacter with a preceeding slash: `\.` <br>
 > Brackets also have special meaning, specifying ranges of numbers, letters, or both. Additional metacharacters and their meanings are listed below.
 
 
@@ -374,8 +374,8 @@ Extract all coding sequences (CDS) and view their start and stop positions with 
 	grep "CDS" HQ596519.gff3 | cut -f 3,4,5
 
 > We have searched for every line that contains **`CDS`** and cut those lines on the third, fourth, and fifth delimiters (delimiters can be anything but the default is a tab).
-> This also highlights that **`grep`** is greedy - returning **`CDS`** even if it is part of a larger phrase or word.
-> Because WNV RNA is translated as a single polyprotein and then post-translationally cleaved, the description of the coding sequence features in this gff file are labeled as 'CDS' for the polyprotein and 'mature_protein_region_of_CDS' for the 10 cleaved subunits.
+> This also highlights that **`grep`** is greedy - returning **`CDS`** even if it is part of a larger phrase or word. <br>
+> Because WNV RNA is translated as a single polyprotein and then post-translationally cleaved, the description of the coding sequence features in this gff file are labeled as 'CDS' for the polyprotein and 'mature_protein_region_of_CDS' for the 10 cleaved subunits. <br>
 > There are a few ways to be more specific about the features we extract.
 
 <br>
@@ -385,7 +385,7 @@ Extract only exact matches to **`CDS`** in the third field of the gff file and p
 
 	cut -f 3,4,5 HQ596519.gff3 | grep "CDS" | grep -v "mature"
 
-* What does the '-v' argument specify in the **`grep`** command?
+* What does the **`-v`** argument specify in the **`grep`** command?
 * What is another approach to getting the same results?
 
 <br>
@@ -394,7 +394,7 @@ Find and count only mature protein coding regions.
 
 	grep -wc "mature_protein_region_of_CDS" HQ596519.gff3
 
- > We specify an exact word match with the `w` argument.
+ > We specify an exact word match with the **`-w`** argument.
 
 <br>
 
@@ -402,7 +402,7 @@ Count how many mature protein coding regions are on the positive strand (informa
 
 	grep -w "mature_protein_region_of_CDS" HQ596519.gff3 | cut -f 7 | sort | uniq -c
 
-> **`sort`** sorts lines alpha-numerically (by default, this can be changed) and **`uniq -c`** counts the number of times each unique pattern occurs.
+> **`sort`** sorts lines alpha-numerically (by default, this can be changed) and **`uniq -c`** counts the number of times each unique pattern occurs. <br>
 > Note that the lines must be sorted in order for **`uniq -c`** to work properly.
 
 <br>
@@ -417,11 +417,9 @@ The basic syntax is:
 
 	for FILE in *common_file_ending; do command $FILE; done
 
-> The interpretation of this code is:
-> For every file that ends in some common ending (such as .txt or .gz), perform (do) some command on that file until there are no more files on which to operate,
-> whereby “done” will exit us from the loop.
-> The $ in front of FILE indicates that $FILE is a variable, a placeholder which is referring to each file that enters the loop,
-> just as x is a variable that represents 2 in the equation x = 2.
+> The interpretation of this code is: <br>
+> For every file that ends in some common ending (such as .txt or .gz), perform (do) some command on that file until there are no more files on which to operate, whereby “done” will exit us from the loop. <br>
+> The $ in front of FILE indicates that $FILE is a variable, a placeholder which is referring to each file that enters the loop, just as x is a variable that represents 2 in the equation x = 2. <br>
 > The `for`, `in`, `do`, and `done` are required parts of the for-loop syntax.
 
 <br>
@@ -432,7 +430,7 @@ Use a 'for loop' to count the lines in your reference fasta and gff file:
 	for filn in HQ*; do wc -l $filn; done
 
 
-> Here we use the greedy metacharacter, **`*`** to specify that we want to count the lines of all files begining with 'HQ'.
+> Here we use the greedy metacharacter, **`*`** to specify that we want to count the lines of all files begining with 'HQ'. <br>
 > Note that you don't actually need a loop to count the lines in both files.
 
 	wc -l HQ*
