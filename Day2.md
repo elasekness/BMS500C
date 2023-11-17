@@ -82,6 +82,7 @@ A general workflow for generating a reference-based assembly is given below:
 
  - Samtools/bcftools
  - GATK
+ - FreeBayes
  - iVAR (for viruses)
  - octopus (for polyploid genomes)
 
@@ -130,7 +131,7 @@ Remove adapters from your reads and keep only those reads passing quality metric
 > **`Paired`** keeps 1 and 2 reads in order.  In other words, if one of the pairs fails quality control, both are removed.  
 > The nice thing about TrimGalore is it pretty much does everything for you automatically, including detecting the type of adapter present 
 > It also prints some summary statistics to STDOUT.
-> Trimmed reads are now in fastq files with the specified basename: `wnv[A-G]_val_1.fastq` and `wnv[A-G]_val_2.fastq
+> Trimmed reads are now in fastq files with the specified basename: `wnv[A-G]_val_1.fastq` and `wnv[A-G]_val_2.fastq`
 
 * Judging from the TrimGalore output, does your sequencing run look good?
 * What is the percentage of reads that passed trimming?
@@ -199,8 +200,15 @@ Now use `awk` to cut the third field, add each successive line to the last, and 
 
 
 ## Single nucleotide variant (SNV) calling
-A single nucleotide variant (SNV) is a substitution of one nucleotide for another with respect to our reference genome. A single nucleotide polymorphism (SNP) is an SNV present in at least 1% of the population but the terms are often used interchangeably.  Other types of variation include insertions and deletions (INDELS), which we will not be identifying. There are several tools that will perform variant calling.  We will use bcftools.
+A single nucleotide variant (SNV) is a substitution of one nucleotide for another with respect to our reference genome. A single nucleotide polymorphism (SNP) is an SNV present in at least 1% of the population but the terms are often used interchangeably.  Other types of variation include insertions and deletions (INDELS), which we will not be identifying. There are several tools that will perform variant calling.  We will use [Bcftools](https://samtools.github.io/bcftools/).
 
-	bctools mpileup -q 30 -A -d 100000 -f HQ596519.fasta wnv[A-Z].sorted.bam | bcftools call -m -v -V indels --ploid 1 > wnv[A-Z].vcf
+	bctools mpileup -q 30 -d 100000 -f HQ596519.fasta wnv[A-Z].sorted.bam | bcftools call -m -v -V indels --ploid 1 > wnv[A-Z].vcf
 
- 
+> The `mpileup` function calculates genotype likelihoods and the `call` function uses this information to call variants. <br>
+> **`-q`** specifies the minimum mapping quality for an alignment to be considered <br>
+> **`-d`** specifies the maximum depth to read at each position <br>
+> **`-f`** indicates the reference genome <br>
+> **`-m`** = multi-allelic variant caller <br>
+> **`-v`** = output only variant positions (i.e. not those that match the reference nucleotide) <br>
+> **`-V`** = do not consider INDELs <br>
+> Notice that the output is in the tab delimited [VCF](https://samtools.github.io/hts-specs/VCFv4.2.pdf) format.
