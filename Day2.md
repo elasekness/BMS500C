@@ -1,12 +1,12 @@
 ## Tutorial 2
 
-**Objective:** To perform reference-based assemblies of West Nile Virus genome libraries to determine infer geographic origin.
+**Objective:** To perform reference-based assemblies of West Nile Virus genome libraries to infer geographic origin.
 
 You will map reads to a reference assembly, generate consensus genomes, identify single nucleotide variants (SNVs),
 and phylogenetically place genomes to determine whether there is a geographical and/or temporal signal to the data.
 Additionally, we will employ and compare the results of different methods to generate our consensus genomes.
 This includes using software that I have pre-installed on the VM as well as containerized versions of the same
-software pulled from Docker. Finally, you will learn about GitHub and Docker for obtaining and installing bioinforamtics software.
+software pulled from Docker. Finally, you will learn about Docker for running bioinforamtics software.
 <br>
 
 
