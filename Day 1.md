@@ -484,3 +484,4 @@ Usually, we escape special characters with a backslash to interpret them literal
 ## Assignment 1 ##
 
 Now that we're all expert pipers and regex users, can you modify the sequence names in the wnv_contextual.fasta file so that only the accession number proceeded by the geographic location (Country or state) and collection date are displayed?
+> One possible solution is provided [here](https://github.com/elasekness/BMS500C/blob/main/Answers.md).
