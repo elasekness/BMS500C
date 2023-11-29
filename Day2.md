@@ -228,7 +228,7 @@ A single nucleotide variant (SNV) is a substitution of one nucleotide for anothe
 
 We will use [Bcftools](https://samtools.github.io/bcftools/).
 
-	bctools mpileup -q 30 -d 100000 -f HQ596519.fasta wnv[A-Z].sorted.bam | bcftools call -m -v -V indels --ploid 1 > wnv[A-Z].vcf
+	bctools mpileup -q 30 -d 100000 -f HQ596519.fasta wnv[A-Z].sorted.bam | bcftools call -m -v -V indels --ploidy 1 > wnv[A-Z].vcf
 
 > The `mpileup` function calculates genotype likelihoods and the `call` function uses this information to call variants. <br>
 > **`-q`** specifies the minimum mapping quality for an alignment to be considered <br>
@@ -249,7 +249,7 @@ Do all variant calls appear to be high-quality or should some be excluded?  Woul
 
 There are many different criteria you could use to filter a vcf file. And these criteria will likely change depending on the goals of the project and the organism or population of study.  Let's use another function of `bcftools` to filter our vcf files by minimum quality and depth criteria.
 
-	bcftools query -i 'QUAL>220 && DP>100' -f '%POS\t%REF\t%ALT\t%QUAL' wnv[A-G].vcf
+	bcftools query -i 'QUAL>220 && DP>100' -f '%POS\t%REF\t%ALT\t%QUAL\n' wnv[A-G].vcf
 
  > **`-i`** specifies the filtering criteria.  We want a quality value greater than 220 and a depth value greater than 100 <br>
  > **`-f`** specifies the fields we want output to STDOUT.  In this case, we want to see the position, reference and alternative alleles, and the quality value, seperated by a tab `\t`.
